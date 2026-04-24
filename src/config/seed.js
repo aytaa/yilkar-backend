@@ -1,17 +1,13 @@
-require('dotenv').config();
 const bcrypt = require('bcryptjs');
-const { sequelize } = require('./postgres');
 const { User, Dealer, Customer, Device } = require('../models/postgres/index');
 const env = require('./env');
+const logger = require('../utils/logger');
 
-async function seed() {
-  await sequelize.authenticate();
-  await sequelize.sync({ alter: true });
-
+async function runSeed() {
   const existing = await User.findOne({ where: { email: env.ADMIN_EMAIL } });
   if (existing) {
-    console.log('Seed already applied, skipping');
-    process.exit(0);
+    logger.info('Seed already applied, skipping');
+    return;
   }
 
   const hash = await bcrypt.hash(env.ADMIN_PASSWORD, 10);
@@ -28,7 +24,7 @@ async function seed() {
     name: 'Yilkar Merkez',
     city: 'Kayseri',
     phone: '+90 352 600 0001',
-    email: 'merkez@yilkar.com.tr',
+    email: 'merkez@yilkarklima.app',
     status: 'active',
   });
 
@@ -54,11 +50,7 @@ async function seed() {
     target_temp: 22,
   });
 
-  console.log(`Seed complete. Admin: ${env.ADMIN_EMAIL} / ${env.ADMIN_PASSWORD}`);
-  process.exit(0);
+  logger.info(`Seed complete. Admin: ${env.ADMIN_EMAIL}`);
 }
 
-seed().catch((err) => {
-  console.error('Seed failed:', err);
-  process.exit(1);
-});
+module.exports = { runSeed };

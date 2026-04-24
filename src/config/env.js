@@ -30,6 +30,6 @@ module.exports = {
 
   EXPO_ACCESS_TOKEN: process.env.EXPO_ACCESS_TOKEN || '',
 
-  ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'admin@yilkar.com.tr',
+  ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'admin@yilkarklima.app',
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'Admin1234!',
 };

@@ -15,10 +15,13 @@ const { connectRegistryRedis } = require('./config/redisRegistry');
 const { connect: connectMqtt, startHeartbeatWatcher } = require('./services/mqttService');
 const { i18next, middleware: i18nMiddleware } = require('./config/i18n');
 const { errorHandler } = require('./middleware/errorHandler');
+const { runSeed } = require('./config/seed');
 
 require('./models/postgres/index');
 
 const app = express();
+
+app.set('trust proxy', 1);
 
 // Security
 app.use(helmet());
@@ -84,6 +87,7 @@ app.use(errorHandler);
 async function start() {
   try {
     await connectPostgres();
+    await runSeed();
     await connectMongo();
     await connectRedis();
     await connectRegistryRedis();
