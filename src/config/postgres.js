@@ -15,6 +15,7 @@ const sequelize = new Sequelize(env.PG_DB, env.PG_USER, env.PG_PASSWORD, {
 
 async function connectPostgres() {
   await sequelize.authenticate();
+  await sequelize.sync({ alter: true });
   logger.info('PostgreSQL connected');
 }
 
