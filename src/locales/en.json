@@ -1,0 +1,78 @@
+{
+  "common": {
+    "validationError": "Validation error",
+    "internalError": "Internal server error",
+    "notFound": "Record not found",
+    "databaseError": "Database error",
+    "tooManyRequests": "Too many requests, please wait",
+    "badRequest": "Bad request",
+    "success": "Operation successful",
+    "created": "Record created",
+    "updated": "Record updated",
+    "deleted": "Record deleted"
+  },
+  "auth": {
+    "invalidCredentials": "Invalid email or password",
+    "tokenExpired": "Session expired",
+    "tokenInvalid": "Invalid token",
+    "unauthorized": "Authorization required",
+    "forbidden": "You do not have permission for this action",
+    "refreshTokenExpired": "Refresh token expired",
+    "passwordTooWeak": "Password too weak, must be at least 8 characters with uppercase, lowercase and numbers",
+    "accountInactive": "Your account is inactive",
+    "loginSuccess": "Login successful",
+    "logoutSuccess": "Logged out",
+    "tokenRefreshed": "Token refreshed"
+  },
+  "device": {
+    "notFound": "Device not found",
+    "alreadyExists": "A device with this serial number already exists",
+    "offline": "Device is offline, cannot send command",
+    "commandFailed": "Failed to send command to device",
+    "invalidCommand": "Invalid command",
+    "notAssigned": "Device is not assigned to a customer",
+    "commandSent": "Command sent successfully",
+    "created": "Device created",
+    "updated": "Device updated",
+    "deleted": "Device deleted"
+  },
+  "customer": {
+    "notFound": "Customer not found",
+    "alreadyExists": "This customer already exists",
+    "hasDevices": "Cannot delete customer with assigned devices",
+    "created": "Customer created",
+    "updated": "Customer updated",
+    "deleted": "Customer deleted"
+  },
+  "dealer": {
+    "notFound": "Dealer not found",
+    "alreadyExists": "This dealer already exists",
+    "hasCustomers": "Cannot delete dealer with assigned customers",
+    "created": "Dealer created",
+    "updated": "Dealer updated",
+    "deleted": "Dealer deleted"
+  },
+  "support": {
+    "ticketNotFound": "Support ticket not found",
+    "ticketClosed": "Cannot reply to a closed ticket",
+    "notOwner": "You do not have access to this ticket",
+    "created": "Support ticket created",
+    "updated": "Support ticket updated",
+    "messageSent": "Message sent"
+  },
+  "user": {
+    "notFound": "User not found",
+    "emailExists": "This email address is already in use",
+    "wrongPassword": "Current password is incorrect",
+    "cannotDeleteSelf": "You cannot delete your own account",
+    "created": "User created",
+    "updated": "User updated",
+    "deleted": "User deleted",
+    "passwordChanged": "Password changed"
+  },
+  "notification": {
+    "notFound": "Notification not found",
+    "markedAsRead": "Notification marked as read",
+    "allMarkedAsRead": "All notifications marked as read"
+  }
+}

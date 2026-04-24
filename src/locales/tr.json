@@ -1,0 +1,78 @@
+{
+  "common": {
+    "validationError": "Doğrulama hatası",
+    "internalError": "Sunucu hatası",
+    "notFound": "Kayıt bulunamadı",
+    "databaseError": "Veritabanı hatası",
+    "tooManyRequests": "Çok fazla istek gönderildi, lütfen bekleyin",
+    "badRequest": "Geçersiz istek",
+    "success": "İşlem başarılı",
+    "created": "Kayıt oluşturuldu",
+    "updated": "Kayıt güncellendi",
+    "deleted": "Kayıt silindi"
+  },
+  "auth": {
+    "invalidCredentials": "E-posta veya şifre hatalı",
+    "tokenExpired": "Oturum süresi doldu",
+    "tokenInvalid": "Geçersiz token",
+    "unauthorized": "Yetkilendirme gerekli",
+    "forbidden": "Bu işlem için yetkiniz yok",
+    "refreshTokenExpired": "Yenileme token'ı süresi doldu",
+    "passwordTooWeak": "Şifre çok zayıf, en az 8 karakter, büyük/küçük harf ve rakam içermeli",
+    "accountInactive": "Hesabınız aktif değil",
+    "loginSuccess": "Giriş başarılı",
+    "logoutSuccess": "Çıkış yapıldı",
+    "tokenRefreshed": "Token yenilendi"
+  },
+  "device": {
+    "notFound": "Cihaz bulunamadı",
+    "alreadyExists": "Bu seri numarasına sahip cihaz zaten mevcut",
+    "offline": "Cihaz çevrimdışı, komut gönderilemez",
+    "commandFailed": "Cihaza komut gönderilemedi",
+    "invalidCommand": "Geçersiz komut",
+    "notAssigned": "Cihaz bir müşteriye atanmamış",
+    "commandSent": "Komut başarıyla gönderildi",
+    "created": "Cihaz oluşturuldu",
+    "updated": "Cihaz güncellendi",
+    "deleted": "Cihaz silindi"
+  },
+  "customer": {
+    "notFound": "Müşteri bulunamadı",
+    "alreadyExists": "Bu müşteri zaten mevcut",
+    "hasDevices": "Müşteriye bağlı cihazlar olduğu için silinemez",
+    "created": "Müşteri oluşturuldu",
+    "updated": "Müşteri güncellendi",
+    "deleted": "Müşteri silindi"
+  },
+  "dealer": {
+    "notFound": "Bayi bulunamadı",
+    "alreadyExists": "Bu bayi zaten mevcut",
+    "hasCustomers": "Bayiye bağlı müşteriler olduğu için silinemez",
+    "created": "Bayi oluşturuldu",
+    "updated": "Bayi güncellendi",
+    "deleted": "Bayi silindi"
+  },
+  "support": {
+    "ticketNotFound": "Destek talebi bulunamadı",
+    "ticketClosed": "Kapalı taleplere yanıt verilemez",
+    "notOwner": "Bu talebe erişim yetkiniz yok",
+    "created": "Destek talebi oluşturuldu",
+    "updated": "Destek talebi güncellendi",
+    "messageSent": "Mesaj gönderildi"
+  },
+  "user": {
+    "notFound": "Kullanıcı bulunamadı",
+    "emailExists": "Bu e-posta adresi zaten kullanılıyor",
+    "wrongPassword": "Mevcut şifre hatalı",
+    "cannotDeleteSelf": "Kendi hesabınızı silemezsiniz",
+    "created": "Kullanıcı oluşturuldu",
+    "updated": "Kullanıcı güncellendi",
+    "deleted": "Kullanıcı silindi",
+    "passwordChanged": "Şifre değiştirildi"
+  },
+  "notification": {
+    "notFound": "Bildirim bulunamadı",
+    "markedAsRead": "Bildirim okundu olarak işaretlendi",
+    "allMarkedAsRead": "Tüm bildirimler okundu olarak işaretlendi"
+  }
+}
