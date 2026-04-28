@@ -13,6 +13,14 @@ router.post('/login',
   ctrl.login
 );
 
+router.post('/tech-login',
+  audit('TECH_LOGIN'),
+  body('email').isEmail().normalizeEmail(),
+  body('password').notEmpty(),
+  validate,
+  ctrl.techLogin
+);
+
 router.post('/refresh',
   body('refresh_token').notEmpty(),
   validate,

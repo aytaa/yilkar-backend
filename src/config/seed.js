@@ -50,7 +50,19 @@ async function runSeed() {
     target_temp: 22,
   });
 
-  logger.info(`Seed complete. Admin: ${env.ADMIN_EMAIL}`);
+  const techExisting = await User.findOne({ where: { email: env.TECH_EMAIL } });
+  if (!techExisting) {
+    const techHash = await bcrypt.hash(env.TECH_PASSWORD, 10);
+    await User.create({
+      name: 'Yilkar Tech',
+      email: env.TECH_EMAIL,
+      password: techHash,
+      role: 'tech',
+      status: 'active',
+    });
+  }
+
+  logger.info(`Seed complete. Admin: ${env.ADMIN_EMAIL} | Tech: ${env.TECH_EMAIL}`);
 }
 
 module.exports = { runSeed };

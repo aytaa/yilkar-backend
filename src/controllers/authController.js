@@ -78,6 +78,33 @@ async function me(req, res, next) {
   }
 }
 
+async function techLogin(req, res, next) {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ where: { email } });
+    if (!user || user.role !== 'tech') throw new AppError('AUTH_1001');
+    if (user.status !== 'active') throw new AppError('AUTH_1008');
+
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) throw new AppError('AUTH_1001');
+
+    await user.update({ last_login_at: new Date() });
+
+    const payload = { id: user.id, role: user.role };
+    const accessToken  = signAccess(payload);
+    const refreshToken = signRefresh({ id: user.id });
+
+    return success(res, {
+      access_token:  accessToken,
+      refresh_token: refreshToken,
+      user: { id: user.id, name: user.name, email: user.email, role: user.role },
+    }, req.t('auth.loginSuccess'));
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function registerToken(req, res, next) {
   try {
     const { expo_push_token } = req.body;
@@ -97,4 +124,4 @@ async function logout(req, res, next) {
   }
 }
 
-module.exports = { login, refresh, me, registerToken, logout };
+module.exports = { login, techLogin, refresh, me, registerToken, logout };

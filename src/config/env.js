@@ -32,4 +32,7 @@ module.exports = {
 
   ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'admin@yilkarklima.app',
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'Admin1234!',
+
+  TECH_EMAIL: process.env.TECH_EMAIL || 'tech@yilkarklima.app',
+  TECH_PASSWORD: process.env.TECH_PASSWORD || 'Tech1234!',
 };
