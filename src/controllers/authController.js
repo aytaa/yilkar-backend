@@ -3,6 +3,9 @@ const { User } = require('../models/postgres/index');
 const { signAccess, signRefresh, verifyRefresh } = require('../utils/jwt');
 const { AppError } = require('../errors/codes');
 const { success } = require('../utils/response');
+const { redis } = require('../config/redis');
+
+const PUSH_TOKEN_TTL = 30 * 24 * 3600; // 30 gün
 
 async function login(req, res, next) {
   try {
@@ -75,6 +78,17 @@ async function me(req, res, next) {
   }
 }
 
+async function registerToken(req, res, next) {
+  try {
+    const { expo_push_token } = req.body;
+    await User.update({ expo_push_token }, { where: { id: req.user.id } });
+    await redis.set(`user:push_token:${req.user.id}`, expo_push_token, 'EX', PUSH_TOKEN_TTL);
+    return success(res, null, 'Token kaydedildi');
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function logout(req, res, next) {
   try {
     return success(res, null, req.t('auth.logoutSuccess'));
@@ -83,4 +97,4 @@ async function logout(req, res, next) {
   }
 }
 
-module.exports = { login, refresh, me, logout };
+module.exports = { login, refresh, me, registerToken, logout };

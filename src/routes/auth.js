@@ -21,6 +21,13 @@ router.post('/refresh',
 
 router.get('/me', authenticate, ctrl.me);
 
+router.post('/device-token',
+  authenticate,
+  body('expo_push_token').notEmpty().isString(),
+  validate,
+  ctrl.registerToken
+);
+
 router.post('/logout', authenticate, audit('LOGOUT'), ctrl.logout);
 
 module.exports = router;

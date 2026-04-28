@@ -127,6 +127,17 @@ async function handleStatus(serialNo, payload) {
   );
   await redis.set(`device:online:${serialNo}`, isOnline ? '1' : '0', 'EX', 300);
   logger.info(`Device ${serialNo} is ${statusStr}`);
+
+  const device = await Device.findOne({ where: { serial_no: serialNo }, attributes: ['id', 'customer_id'] });
+  if (device) {
+    await redis.publish('yilkar:events', JSON.stringify({
+      type: isOnline ? 'device_online' : 'device_offline',
+      device_id: device.id,
+      device_serial: serialNo,
+      customer_id: device.customer_id,
+      ts: Date.now(),
+    }));
+  }
 }
 
 async function handleAlarm(device, errorCode) {
@@ -151,6 +162,16 @@ async function handleAlarm(device, errorCode) {
     device_serial: device.serial_no,
     severity:      errorCode > 100 ? 'critical' : 'warning',
   });
+
+  await redis.publish('yilkar:events', JSON.stringify({
+    type:          'alarm',
+    device_id:     device.id,
+    device_serial: device.serial_no,
+    customer_id:   device.customer_id,
+    error_code:    errorCode,
+    severity:      errorCode > 100 ? 'critical' : 'warning',
+    ts:            Date.now(),
+  }));
 }
 
 async function sendCommand(serialNo, command) {
