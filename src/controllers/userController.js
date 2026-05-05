@@ -10,7 +10,10 @@ async function list(req, res, next) {
     const offset = (page - 1) * limit;
     const where = {};
 
-    if (role) where.role = role;
+    if (role) {
+      const roles = role.split(',').map(r => r.trim()).filter(Boolean);
+      where.role = roles.length === 1 ? roles[0] : { [Op.in]: roles };
+    }
     if (status) where.status = status;
     if (dealer_id) where.dealer_id = dealer_id;
     if (req.user.role === 'dealer') where.dealer_id = req.user.dealer_id;

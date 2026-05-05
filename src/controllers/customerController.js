@@ -102,7 +102,7 @@ async function getUsers(req, res, next) {
     if (!customer) throw new AppError('CUSTOMER_3001');
 
     const users = await User.findAll({
-      where: { customer_id: customer.id, role: ['tech', 'admin'] },
+      where: { customer_id: customer.id },
       attributes: { exclude: ['password'] },
     });
     return success(res, users);
