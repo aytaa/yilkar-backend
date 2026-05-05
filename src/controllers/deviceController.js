@@ -16,7 +16,8 @@ async function list(req, res, next) {
     if (model) where.model = model;
     if (customer_id) where.customer_id = customer_id;
     if (dealer_id) where.dealer_id = dealer_id;
-    if (req.user.role === 'dealer') where.dealer_id = req.user.dealer_id;
+    if (req.user.role === 'dealer')    where.dealer_id   = req.user.dealer_id;
+    if (req.user.customer_id)          where.customer_id = req.user.customer_id;
 
     if (search) {
       where[Op.or] = [
