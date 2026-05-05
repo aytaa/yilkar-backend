@@ -41,7 +41,7 @@ function audit(action = null) {
         ip: req.ip || req.headers['x-forwarded-for'],
         user_agent: req.headers['user-agent'],
         status_code: res.statusCode,
-        device_id: req.params?.deviceId || req.body?.device_id || null,
+        device_id: req.body?.device_id || (module === 'devices' ? req.params?.id : null) || null,
         target_id: req.params?.id || null,
         target_type: module,
         details: {
