@@ -74,5 +74,10 @@
     "notFound": "Notification not found",
     "markedAsRead": "Notification marked as read",
     "allMarkedAsRead": "All notifications marked as read"
+  },
+  "schedule": {
+    "notFound": "Schedule not found",
+    "saved": "Schedule saved",
+    "deleted": "Schedule deleted"
   }
 }

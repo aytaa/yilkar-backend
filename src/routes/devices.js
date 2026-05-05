@@ -4,6 +4,7 @@ const { validate } = require('../middleware/validate');
 const { authenticate, authorize } = require('../middleware/auth');
 const { audit } = require('../middleware/audit');
 const ctrl = require('../controllers/deviceController');
+const scheduleCtrl = require('../controllers/scheduleController');
 
 router.use(authenticate);
 
@@ -60,6 +61,39 @@ router.get('/:id/live',
   param('id').isUUID(),
   validate,
   ctrl.getLiveState
+);
+
+// ── Schedule routes ────────────────────────────────────────────────────────
+
+router.get('/:id/schedules',
+  param('id').isUUID(),
+  validate,
+  scheduleCtrl.getSchedules
+);
+
+router.post('/:id/schedules',
+  audit('SCHEDULE_SAVED'),
+  param('id').isUUID(),
+  body('type').isIn(['heat', 'cool', 'fan']),
+  body('settings').isObject(),
+  body('settings.time.hour').isInt({ min: 0, max: 23 }),
+  body('settings.time.minute').isInt({ min: 0, max: 59 }),
+  body('settings.repeat').isArray(),
+  validate,
+  scheduleCtrl.upsertSchedule
+);
+
+router.delete('/:id/schedules/:type',
+  audit('SCHEDULE_DELETED'),
+  param('id').isUUID(),
+  param('type').isIn(['heat', 'cool', 'fan']),
+  validate,
+  scheduleCtrl.deleteSchedule
+);
+
+// Internal endpoint — called by cron service to log executed schedule commands
+router.post('/:id/schedules/command-log',
+  scheduleCtrl.logScheduleCommand
 );
 
 module.exports = router;

@@ -6,9 +6,9 @@ module.exports = {
   API_PREFIX: process.env.API_PREFIX || '/api/v1',
 
   JWT_SECRET: process.env.JWT_SECRET || 'dev_jwt_secret_change_in_prod',
-  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '15m',
+  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '10m',
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'dev_refresh_secret_change_in_prod',
-  JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+  JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || '1y',
 
   PG_HOST: process.env.PG_HOST || 'localhost',
   PG_PORT: parseInt(process.env.PG_PORT) || 5432,
@@ -29,6 +29,8 @@ module.exports = {
   MQTT_CLIENT_ID: process.env.MQTT_CLIENT_ID || 'yilkar-backend',
 
   EXPO_ACCESS_TOKEN: process.env.EXPO_ACCESS_TOKEN || '',
+
+  INTERNAL_API_KEY: process.env.INTERNAL_API_KEY || 'dev_internal_key_change_in_prod',
 
   ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'admin@yilkarklima.app',
   ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'Admin1234!',

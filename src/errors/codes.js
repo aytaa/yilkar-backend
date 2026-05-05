@@ -62,6 +62,9 @@ const ERROR_CODES = {
 
   // ── NOTIFICATION ────────────────────────────────────────────────────────
   NOTIF_7001: { code: 'NOTIF_7001', status: 404, key: 'notification.notFound' },
+
+  // ── SCHEDULE ─────────────────────────────────────────────────────────────
+  SCHED_8001: { code: 'SCHED_8001', status: 404, key: 'schedule.notFound' },
 };
 
 class AppError extends Error {

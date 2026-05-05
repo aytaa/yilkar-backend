@@ -74,5 +74,10 @@
     "notFound": "Bildirim bulunamadı",
     "markedAsRead": "Bildirim okundu olarak işaretlendi",
     "allMarkedAsRead": "Tüm bildirimler okundu olarak işaretlendi"
+  },
+  "schedule": {
+    "notFound": "Zamanlama bulunamadı",
+    "saved": "Zamanlama kaydedildi",
+    "deleted": "Zamanlama silindi"
   }
 }
