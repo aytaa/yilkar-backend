@@ -55,7 +55,9 @@ app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Logging
-app.use(morgan('combined', { stream: { write: (msg) => logger.info(msg.trim()) } }));
+morgan.token('x-app-name', (req) => req.headers['x-app-name'] || '-');
+const logFormat = ':remote-addr - - [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :x-app-name';
+app.use(morgan(logFormat, { stream: { write: (msg) => logger.info(msg.trim()) } }));
 
 // i18n
 app.use(i18nMiddleware.handle(i18next));
