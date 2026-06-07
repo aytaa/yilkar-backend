@@ -9,6 +9,11 @@ const registryRedis = new Redis({
   password: env.REDIS_PASSWORD || undefined,
   db:       5,
   lazyConnect: true,
+  // Resilience: keep retrying transient outages instead of failing closed
+  maxRetriesPerRequest: 3,
+  enableOfflineQueue: true,
+  connectTimeout: 10000,
+  retryStrategy: (times) => Math.min(times * 200, 5000),
 });
 
 registryRedis.on('connect', () => logger.info('Registry Redis (DB5) connected'));

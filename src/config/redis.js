@@ -7,6 +7,11 @@ const redis = new Redis({
   port: env.REDIS_PORT,
   password: env.REDIS_PASSWORD || undefined,
   lazyConnect: true,
+  // Resilience: keep retrying transient outages instead of failing closed
+  maxRetriesPerRequest: 3,
+  enableOfflineQueue: true,
+  connectTimeout: 10000,
+  retryStrategy: (times) => Math.min(times * 200, 5000),
 });
 
 redis.on('connect', () => logger.info('Redis connected'));

@@ -108,6 +108,19 @@ async function handleTelemetry(serialNo, payload) {
     { where: { serial_no: serialNo } }
   );
 
+  // High-frequency live state for SSE consumers (separate channel so the
+  // notification service, which only listens on yilkar:events, is unaffected).
+  await redis.publish('yilkar:telemetry', JSON.stringify({
+    type:          'device_state',
+    device_id:     device.id,
+    device_serial: serialNo,
+    customer_id:   device.customer_id,
+    dealer_id:     device.dealer_id,
+    state,
+    data, // full raw device payload (technic app needs every field)
+    ts:            Date.now(),
+  }));
+
   if (data.ErrCodes && data.ErrCodes !== 0) {
     await handleAlarm(device, data.ErrCodes);
   }
@@ -128,13 +141,14 @@ async function handleStatus(serialNo, payload) {
   await redis.set(`device:online:${serialNo}`, isOnline ? '1' : '0', 'EX', 300);
   logger.info(`Device ${serialNo} is ${statusStr}`);
 
-  const device = await Device.findOne({ where: { serial_no: serialNo }, attributes: ['id', 'customer_id'] });
+  const device = await Device.findOne({ where: { serial_no: serialNo }, attributes: ['id', 'customer_id', 'dealer_id'] });
   if (device) {
     await redis.publish('yilkar:events', JSON.stringify({
       type: isOnline ? 'device_online' : 'device_offline',
       device_id: device.id,
       device_serial: serialNo,
       customer_id: device.customer_id,
+      dealer_id: device.dealer_id,
       ts: Date.now(),
     }));
   }
@@ -168,6 +182,7 @@ async function handleAlarm(device, errorCode) {
     device_id:     device.id,
     device_serial: device.serial_no,
     customer_id:   device.customer_id,
+    dealer_id:     device.dealer_id,
     error_code:    errorCode,
     severity:      errorCode > 100 ? 'critical' : 'warning',
     ts:            Date.now(),

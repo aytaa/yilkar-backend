@@ -4,6 +4,7 @@ const Customer = require('./Customer');
 const Device = require('./Device');
 const SupportTicket = require('./SupportTicket');
 const SupportMessage = require('./SupportMessage');
+const AllowedDevice = require('./AllowedDevice');
 
 // Associations
 Dealer.hasMany(Customer, { foreignKey: 'dealer_id', as: 'customers' });
@@ -30,4 +31,4 @@ SupportTicket.belongsTo(User, { foreignKey: 'created_by', as: 'creator' });
 
 SupportMessage.belongsTo(User, { foreignKey: 'sender_id', as: 'sender' });
 
-module.exports = { User, Dealer, Customer, Device, SupportTicket, SupportMessage };
+module.exports = { User, Dealer, Customer, Device, SupportTicket, SupportMessage, AllowedDevice };

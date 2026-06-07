@@ -13,6 +13,7 @@ const { connectMongo } = require('./config/mongo');
 const { connectRedis } = require('./config/redis');
 const { connectRegistryRedis } = require('./config/redisRegistry');
 const { connect: connectMqtt, startHeartbeatWatcher } = require('./services/mqttService');
+const { syncWhitelist } = require('./services/registrySync');
 const { i18next, middleware: i18nMiddleware } = require('./config/i18n');
 const { errorHandler } = require('./middleware/errorHandler');
 const { runSeed } = require('./config/seed');
@@ -56,7 +57,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Logging
 morgan.token('x-app-name', (req) => req.headers['x-app-name'] || '-');
-const logFormat = ':remote-addr - - [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :x-app-name';
+// Redact the SSE ?token= query param so access tokens never land in logs
+morgan.token('url-safe', (req) => (req.originalUrl || req.url || '').replace(/([?&]token=)[^&]+/i, '$1REDACTED'));
+const logFormat = ':remote-addr - - [:date[clf]] ":method :url-safe HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :x-app-name';
 app.use(morgan(logFormat, { stream: { write: (msg) => logger.info(msg.trim()) } }));
 
 // i18n
@@ -77,6 +80,7 @@ app.use(`${prefix}/notifications`, require('./routes/notifications'));
 app.use(`${prefix}/audit-logs`, require('./routes/auditLogs'));
 app.use(`${prefix}/dashboard`, require('./routes/dashboard'));
 app.use(`${prefix}/mqtt/registry`, require('./routes/mqttRegistry'));
+app.use(`${prefix}/events`, require('./routes/events'));
 
 // 404
 app.use((req, res) => {
@@ -93,6 +97,7 @@ async function start() {
     await connectMongo();
     await connectRedis();
     await connectRegistryRedis();
+    await syncWhitelist();
     await connectMqtt();
     startHeartbeatWatcher();
 

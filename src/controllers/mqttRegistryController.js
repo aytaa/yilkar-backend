@@ -1,4 +1,5 @@
 const { registryRedis } = require('../config/redisRegistry');
+const { AllowedDevice } = require('../models/postgres/index');
 const { success } = require('../utils/response');
 
 const ALLOWED_KEY = 'mqtt:allowed';
@@ -21,6 +22,11 @@ async function listAllowed(req, res) {
 // POST /mqtt/registry/accept/:serial
 async function acceptDevice(req, res) {
   const serial = req.params.serial;
+  // PostgreSQL is the durable source of truth; Redis is the fast cache.
+  await AllowedDevice.findOrCreate({
+    where: { serial_no: serial },
+    defaults: { accepted_by: req.user?.id || null },
+  });
   await registryRedis.sadd(ALLOWED_KEY, serial);
   await registryRedis.hdel(PENDING_KEY, serial);
   return success(res, { serial }, 'Device accepted');
@@ -36,6 +42,7 @@ async function rejectDevice(req, res) {
 // DELETE /mqtt/registry/allowed/:serial
 async function revokeDevice(req, res) {
   const serial = req.params.serial;
+  await AllowedDevice.destroy({ where: { serial_no: serial } });
   await registryRedis.srem(ALLOWED_KEY, serial);
   return success(res, { serial }, 'Device revoked');
 }
