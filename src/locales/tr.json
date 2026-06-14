@@ -24,6 +24,14 @@
     "logoutSuccess": "Çıkış yapıldı",
     "tokenRefreshed": "Token yenilendi"
   },
+  "ota": {
+    "fileRequired": "Firmware dosyası gerekli",
+    "invalidVersion": "Geçersiz sürüm formatı (örn. v1.2.0)",
+    "firmwareNotFound": "Firmware bulunamadı",
+    "uploaded": "Firmware yüklendi",
+    "triggered": "OTA güncellemesi tetiklendi",
+    "deleted": "Firmware silindi"
+  },
   "device": {
     "notFound": "Cihaz bulunamadı",
     "alreadyExists": "Bu seri numarasına sahip cihaz zaten mevcut",

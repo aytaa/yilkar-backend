@@ -65,6 +65,11 @@ const ERROR_CODES = {
 
   // ── SCHEDULE ─────────────────────────────────────────────────────────────
   SCHED_8001: { code: 'SCHED_8001', status: 404, key: 'schedule.notFound' },
+
+  // ── OTA ──────────────────────────────────────────────────────────────────
+  OTA_9001: { code: 'OTA_9001', status: 400, key: 'ota.fileRequired' },
+  OTA_9002: { code: 'OTA_9002', status: 400, key: 'ota.invalidVersion' },
+  OTA_9003: { code: 'OTA_9003', status: 404, key: 'ota.firmwareNotFound' },
 };
 
 class AppError extends Error {

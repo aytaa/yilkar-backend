@@ -81,6 +81,7 @@ app.use(`${prefix}/audit-logs`, require('./routes/auditLogs'));
 app.use(`${prefix}/dashboard`, require('./routes/dashboard'));
 app.use(`${prefix}/mqtt/registry`, require('./routes/mqttRegistry'));
 app.use(`${prefix}/events`, require('./routes/events'));
+app.use(`${prefix}/ota`, require('./routes/ota'));
 
 // 404
 app.use((req, res) => {

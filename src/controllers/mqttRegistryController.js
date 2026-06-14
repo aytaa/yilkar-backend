@@ -22,7 +22,6 @@ async function listAllowed(req, res) {
 // POST /mqtt/registry/accept/:serial
 async function acceptDevice(req, res) {
   const serial = req.params.serial;
-  // PostgreSQL is the durable source of truth; Redis is the fast cache.
   await AllowedDevice.findOrCreate({
     where: { serial_no: serial },
     defaults: { accepted_by: req.user?.id || null },

@@ -24,6 +24,14 @@
     "logoutSuccess": "Logged out",
     "tokenRefreshed": "Token refreshed"
   },
+  "ota": {
+    "fileRequired": "Firmware file is required",
+    "invalidVersion": "Invalid version format (expected v1.2.0)",
+    "firmwareNotFound": "Firmware not found",
+    "uploaded": "Firmware uploaded",
+    "triggered": "OTA update triggered",
+    "deleted": "Firmware deleted"
+  },
   "device": {
     "notFound": "Device not found",
     "alreadyExists": "A device with this serial number already exists",

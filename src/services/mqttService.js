@@ -18,6 +18,10 @@ function buildCommandTopic(serialNo) {
   return `yilkar/s2d/main_settings/${serialNo}`;
 }
 
+function buildOtaTopic(serialNo) {
+  return `yilkar/s2d/ota/${serialNo}`;
+}
+
 async function connect() {
   client = mqtt.connect(`mqtt://${env.MQTT_HOST}:${env.MQTT_PORT}`, {
     clientId:        env.MQTT_CLIENT_ID,
@@ -201,6 +205,17 @@ async function sendCommand(serialNo, command) {
   });
 }
 
+async function sendOtaCommand(serialNo, payload) {
+  if (!client || !client.connected) throw new Error('MQTT client not connected');
+  const topic = buildOtaTopic(serialNo);
+  return new Promise((resolve, reject) => {
+    client.publish(topic, JSON.stringify(payload), { qos: 1 }, (err) => {
+      if (err) return reject(err);
+      resolve();
+    });
+  });
+}
+
 async function getDeviceState(serialNo) {
   const raw = await redis.get(`device:state:${serialNo}`);
   return raw ? JSON.parse(raw) : null;
@@ -224,4 +239,4 @@ function startHeartbeatWatcher() {
   }, 60 * 1000);
 }
 
-module.exports = { connect, sendCommand, getDeviceState, startHeartbeatWatcher };
+module.exports = { connect, sendCommand, sendOtaCommand, getDeviceState, startHeartbeatWatcher };
