@@ -32,8 +32,10 @@ module.exports = {
 
   INTERNAL_API_KEY: process.env.INTERNAL_API_KEY || 'dev_internal_key_change_in_prod',
 
-  // OTA: public base URL the DEVICE pulls firmware from + optional download key
-  OTA_BASE_URL: process.env.OTA_BASE_URL || `http://localhost:${parseInt(process.env.PORT) || 3001}`,
+  // OTA: public base URL the DEVICE pulls firmware from.
+  // Bos birakilirsa controller gelen isteğin adresinden turetir (req host) ->
+  // localhost'a asla dusmez. Sadece farkli bir public adres istersen set et.
+  OTA_BASE_URL: process.env.OTA_BASE_URL || '',
   OTA_KEY: process.env.OTA_KEY || '',
 
   ADMIN_EMAIL: process.env.ADMIN_EMAIL || 'admin@yilkarklima.app',
