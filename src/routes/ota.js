@@ -23,7 +23,7 @@ router.post('/upload',
   authorize('superadmin', 'admin'),
   audit('OTA_UPLOADED'),
   upload.single('file'),
-  body('version').notEmpty(),
+  body('version').optional(),   // bos birakilirsa dosya adindan turetilir (v0.4.0.bin)
   body('model').notEmpty(),
   validate,
   ctrl.upload

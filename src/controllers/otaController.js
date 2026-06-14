@@ -7,9 +7,13 @@ const { sendOtaCommand } = require('../services/mqttService');
 const { Device } = require('../models/postgres/index');
 const logger = require('../utils/logger');
 
-/** Build the public download URL the device will pull from. */
-function downloadUrl(model, version) {
-  const base = (env.OTA_BASE_URL || '').replace(/\/$/, '');
+/** Build the public download URL the device will pull from.
+ * Öncelik: OTA_BASE_URL env (varsa) -> yoksa gelen isteğin adresinden türet
+ * (req.protocol + host). 'trust proxy' aktif oldugu icin proxy arkasinda da
+ * https://api.yilkarklima.app dogru cikar. localhost'a asla dusmez. */
+function downloadUrl(model, version, req) {
+  let base = (env.OTA_BASE_URL || '').replace(/\/$/, '');
+  if (!base && req) base = `${req.protocol}://${req.get('host')}`;
   const q = new URLSearchParams({ model });
   if (env.OTA_KEY) q.set('key', env.OTA_KEY);
   return `${base}${env.API_PREFIX}/ota/download/${version}.bin?${q.toString()}`;
@@ -20,7 +24,11 @@ function downloadUrl(model, version) {
 async function upload(req, res, next) {
   try {
     if (!req.file) throw new AppError('OTA_9001');
-    const { version, model, notes } = req.body;
+    let { version, model, notes } = req.body;
+    // Versiyon gonderilmediyse dosya adindan tureT (orn. "v0.4.0.bin" -> "v0.4.0")
+    if (!version && req.file.originalname) {
+      version = req.file.originalname.replace(/\.bin$/i, '');
+    }
     if (!ota.normVersion(version)) throw new AppError('OTA_9002');
     if (!model) throw new AppError('COMMON_0006');
 
@@ -32,7 +40,7 @@ async function upload(req, res, next) {
       uploadedBy: req.user ? req.user.id : null,
     });
     logger.info(`OTA firmware uploaded: ${meta.model} ${meta.version} (${meta.size}B md5=${meta.md5})`);
-    return success(res, { ...meta, url: downloadUrl(meta.model, meta.version) }, 'ota.uploaded', 201);
+    return success(res, { ...meta, url: downloadUrl(meta.model, meta.version, req) }, 'ota.uploaded', 201);
   } catch (err) {
     if (err.code === 'OTA_BAD_VERSION') return next(new AppError('OTA_9002'));
     if (err.code === 'OTA_EMPTY') return next(new AppError('OTA_9001'));
@@ -45,7 +53,7 @@ async function upload(req, res, next) {
 async function list(req, res, next) {
   try {
     const items = ota.listFirmwares(req.query.model || null)
-      .map((m) => ({ ...m, url: downloadUrl(m.model, m.version) }));
+      .map((m) => ({ ...m, url: downloadUrl(m.model, m.version, req) }));
     return success(res, items);
   } catch (err) { next(err); }
 }
@@ -58,7 +66,7 @@ async function latest(req, res, next) {
     if (!model) throw new AppError('COMMON_0006');
     const meta = ota.getLatest(model);
     if (!meta) throw new AppError('OTA_9003');
-    return success(res, { ...meta, url: downloadUrl(meta.model, meta.version) });
+    return success(res, { ...meta, url: downloadUrl(meta.model, meta.version, req) });
   } catch (err) { next(err); }
 }
 
@@ -120,7 +128,7 @@ async function trigger(req, res, next) {
     const command = {
       cmd: 'ota',
       version: meta.version,
-      url: downloadUrl(meta.model, meta.version),
+      url: downloadUrl(meta.model, meta.version, req),
       md5: meta.md5,
       size: meta.size,
     };
